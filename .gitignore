@@ -5,6 +5,9 @@ Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
 
+# borrar las carpetas de los binarios
+**/binaries/
+
 # Dump file
 *.stackdump
 
