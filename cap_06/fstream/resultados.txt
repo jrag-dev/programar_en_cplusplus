@@ -1,0 +1,3 @@
+ Tiempo(s)   Posicion(m)
+	0 	 10.5
+	1 	 15.2
