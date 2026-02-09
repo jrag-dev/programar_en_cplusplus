@@ -18,11 +18,8 @@ class MatrizFisica {
         // 1. CONSTRUCTOR: Reserva la memoria al crear el objeto
         MatrizFisica(size_t n) : tamano(n) {
             try {
-                datos = new double[tamano];
+                datos = new double[tamano]();
                 cout << "-> Memoria para " << tamano << " elementos reservada." << endl;
-
-                // Inicializamos a cero (limpieza)
-                for (size_t i = 0; i < tamano; i++) datos[i] = 0.0;
 
             } catch (const bad_alloc& e) {
                 cerr << "Error: No se pudo crear la matriz: " << e.what() << endl;
@@ -34,6 +31,17 @@ class MatrizFisica {
         ~MatrizFisica() {
             delete[] datos;
             cout << "-> Memoria liberada automaticamente por el Destructor." << endl;
+        }
+
+        // Sobrecarga del operador []
+        // Retornamos double& para poder hacer: matriz[i] = valor;
+        double& operator[](size_t indice) {
+            // En HCP, a veces sacrificamos esta validación por velocidad
+            if (indice >= tamano) {
+                cerr << "ERROR: Indice fuera de rango!" << endl;
+                return datos[0];    // Retorno de emergencia
+            }
+            return datos[indice];
         }
 
         // Método para acceder a los datos de forma segura
@@ -67,6 +75,21 @@ int main(int argc, char const *argv[])
         }   // <--- Al llegar aquí, 'sistema' sale del scope y se llama al destructor
 
         cout << "El objeto ya no existe en este punto." << endl;
+
+        {
+            cout << "\nCreando sistema de 10 particulas..." << endl;
+            MatrizFisica v(10);
+            
+            // Ahora usamos el objeto como un array real
+            v[0] = 9.81;
+            v[4] = 1.62;
+            v[6] = 3.71;
+
+            for (size_t i = 0; i < v.length(); i++) {
+                cout << "Gravedad en indice " << i << ": " << v[i] << " m/s^2" << endl;
+            }
+
+        }
 
     } catch (...) {
         cerr << "El programa termino debido a un error de memoria" << endl;
