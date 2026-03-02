@@ -1,77 +1,47 @@
 #ifndef LIBRO_H
 #define LIBRO_H
 
-#include <string>
-#include <iostream>
+#include "material.h"
 
 
 // Clase que representa un libro de la biblioteca
-class Libro {
+class Libro : public Material {
 
   private:
-    std::string titulo;
     std::string autor;
-    std::string isbn;
-    bool disponible;  // estado del libro
+    std::string editorial;
+    int numeroPaginas;
     
   public:
-    // Constructor: Se llama al crear el objeto. Inicializa el estado
-    Libro(std::string _titulo, std::string _autor, std::string _isbn) : 
-      titulo(_titulo), autor(_autor), isbn(_isbn), disponible(true) 
+    // Constructor: llama al Constructor de Material y luego inicializa lo suyo
+    Libro(std::string _titulo, std::string _cod, int _anio, std::string _autor, std::string _editorial, int _pag) : 
+      Material(_titulo, _cod, _anio), autor(_autor), editorial(_editorial), numeroPaginas(_pag)
     {
-      std::cout << "Libro '" << titulo << "' creado" << std::endl;
+      std::cout << "Libro [" << titulo << "]- detalles especificos añadidos\n" << std::endl;
     }
     
     // Destructor: Se llama al destruir el objeto. Para limpieza.
-    ~Libro() {
-      std::cout << "Libro '" << titulo << "' destruido." << std::endl;
+    ~Libro() override {
+      std::cout << "Destructor especifico de Libro [" << titulo << "]" << std::endl;
     }
 
-    std::string getTitulo() const {
-      return titulo;
+    // Implementación del método virtual puro (OBLIGATORIO)
+    void mostrarInfo() const override {
+      std::cout << "📖 LIBRO: " << titulo
+                << " | Autor: " << autor
+                << " | Alo: " << anio_publicacion
+                << " | Editorial: " << editorial
+                << " | Páginas: " << numeroPaginas
+                << " | " << (disponible ? "✅ Disponible" : "❌ Prestado")
+                << " | Préstamo: " << getDiasPrestamo() << " días\n";
     }
 
-    // Getters (Consultores)
-    std::string getAutor() const {
-      return autor;
-    }
+    // Sobreescribimos el método de dias de préstamo (opcional)
+    int getDiasPrestamo() const override {
+      return 15;
+    } 
 
-    std::string getIsbn() const {
-      return isbn;
-    }
-
-    bool estaDisponible() const {
-      return disponible;
-    }
-
-    // Setters (Modificadores)
-
-    // Método para prestar el libro. Cambia el estado si esta disponible el libro.
-    bool prestar() {
-      if (disponible) {
-        disponible = false;
-        std::cout << "Libro '" << titulo << "' prestado con éxito.\n";
-        return true;
-      } else {
-        std::cout << "El libro '" << titulo << "' no está disponible.\n";
-        return false;
-      }
-    }
-
-    // Método para devolver el libro
-    void devolver() {
-      if (!disponible) {
-        disponible = true;
-        std::cout << "Libro '" << titulo << "' devuelto.\n";
-      } else {
-        std::cout << "El libro '" << titulo << "' ya estaba disponible.\n";
-      }
-    }
-
-    // Mostrar información del libro
-    void mostrarInfo() const {
-      std::cout << "\nTitulo: " << titulo << "\nAutor: " << autor << "\nISBN: " << isbn << "\nEstado: " << (disponible ? " Disponible." : "Prestado.") << std::endl;
-    }
+    std::string getAutor() const { return autor; }
 
 };
 
